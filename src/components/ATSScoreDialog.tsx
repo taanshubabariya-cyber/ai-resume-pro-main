@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useServerFn } from '@tanstack/react-start';
 import { analyzeATS } from '@/server/ai.functions';
 import { resumeToText } from '@/lib/resume-text';
 import type { ResumeData } from '@/types/resume';
@@ -30,14 +29,12 @@ export function ATSScoreDialog({ data }: Props) {
   const [jobDescription, setJobDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const analyzeFn = useServerFn(analyzeATS);
-
   const runAnalysis = async () => {
     setLoading(true);
     setResult(null);
     try {
       const text = resumeToText(data);
-      const res = await analyzeFn({ data: { resumeText: text, jobDescription: jobDescription.trim() || undefined } });
+      const res = await analyzeATS({ resumeText: text, jobDescription: jobDescription.trim() || undefined });
       setResult(res);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Analysis failed');

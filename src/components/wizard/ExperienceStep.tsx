@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useServerFn } from '@tanstack/react-start';
 import type { Experience, ResumeData } from '@/types/resume';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,8 +20,7 @@ function createEmptyExperience(): Experience {
 
 export function ExperienceStep({ data, onChange }: Props) {
   const [improvingId, setImprovingId] = useState<string | null>(null);
-  const improveFn = useServerFn(improveBullets);
-
+  
   const addItem = () => onChange([...data, createEmptyExperience()]);
   const removeItem = (id: string) => onChange(data.filter(e => e.id !== id));
   const updateItem = (id: string, updates: Partial<Experience>) => {
@@ -46,7 +44,7 @@ export function ExperienceStep({ data, onChange }: Props) {
     }
     setImprovingId(exp.id);
     try {
-      const res = await improveFn({ data: { bullets: nonEmpty, role: exp.position, company: exp.company } });
+      const res = await improveBullets({ bullets: nonEmpty, role: exp.position, company: exp.company });
       updateItem(exp.id, { bullets: res.bullets });
       toast.success('Bullets rewritten with AI');
     } catch (e) {
