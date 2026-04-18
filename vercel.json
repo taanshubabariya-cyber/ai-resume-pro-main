@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "builds": [
+    {
+      "src": "dist/server/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/server/index.js"
+    }
+  ]
+}
